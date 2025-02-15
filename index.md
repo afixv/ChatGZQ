@@ -6,11 +6,33 @@
 ---
 
 ## **Anggota Kelompok**  
-| **Nama**                      | **NIM**                | **Peran**                                                  |
-|-------------------------------|-------------------------|------------------------------------------------------------|
-| **Afix Vega Praditya**         | 21/477810/TK/52629      | UI/UX Designer (UXD), Software Engineer (SE), Cloud Engineer (CE) |
-| **Daniel Anantadhirya Adyawisesa Linan** | 22/492989/TK/53975 | Software Engineer (SE), AI Engineer (AIE), Cloud Engineer (CE) |
-| **Ovie Khaira Zayyan**         | 22/494801/TK/54315      | Product Manager (PM), Software Engineer (SE), Cloud Engineer (CE) |  
+<table>
+  <thead>
+    <tr>
+      <th>Nama</th>
+      <th>NIM</th>
+      <th>Peran</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Afix Vega Praditya</td>
+      <td>21/477810/TK/52629</td>
+      <td>UI/UX Designer (UXD), Software Engineer (SE), Cloud Engineer (CE)</td>
+    </tr>
+    <tr>
+      <td>Daniel Anantadhirya Adyawisesa Linan</td>
+      <td>22/492989/TK/53975</td>
+      <td>Software Engineer (SE), AI Engineer (AIE), Cloud Engineer (CE)</td>
+    </tr>
+    <tr>
+      <td>Ovie Khaira Zayyan</td>
+      <td>22/494801/TK/54315</td>
+      <td>Product Manager (PM), Software Engineer (SE), Cloud Engineer (CE)</td>
+    </tr>
+  </tbody>
+</table>
+
 
 ---
 
@@ -49,12 +71,32 @@ Menurut WHO, suatu negara memiliki masalah stunting jika prevalensinya di atas 2
 Kami mengusulkan sebuah aplikasi berbasis AI bernama **ChatGZQ** untuk membantu orang tua memantau status gizi anak, mencegah risiko stunting, dan memberikan panduan praktis tentang nutrisi.  
 
 **Rancangan Fitur:**  
-| **Fitur**                     | **Keterangan**                                                                 |
-|-------------------------------|---------------------------------------------------------------------------------|
-| **Chatbot Konsultasi Gizi**    | Memberikan informasi nutrisi, rekomendasi menu sehat, dan menjawab pertanyaan seputar gizi. |
-| **Klasifikasi Status Gizi**    | Menghitung status gizi anak berdasarkan tinggi, berat, dan usia.               |
-| **Dashboard Tracking Anak**    | Menampilkan grafik perkembangan berat badan, tinggi, dan status gizi anak.     |
-| **Rekomendasi Resep Makanan**  | Membantu orang tua membuat makanan sehat sesuai kebutuhan dan bahan yang tersedia. |
+<table>
+  <thead>
+    <tr>
+      <th>Fitur</th>
+      <th>Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Chatbot Konsultasi Gizi</strong></td>
+      <td>Memberikan informasi nutrisi, rekomendasi menu sehat, dan menjawab pertanyaan seputar gizi.</td>
+    </tr>
+    <tr>
+      <td><strong>Klasifikasi Status Gizi</strong></td>
+      <td>Menghitung status gizi anak berdasarkan tinggi, berat, dan usia.</td>
+    </tr>
+    <tr>
+      <td><strong>Dashboard Tracking Anak</strong></td>
+      <td>Menampilkan grafik perkembangan berat badan, tinggi, dan status gizi anak.</td>
+    </tr>
+    <tr>
+      <td><strong>Rekomendasi Resep Makanan</strong></td>
+      <td>Membantu orang tua membuat makanan sehat sesuai kebutuhan dan bahan yang tersedia.</td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
