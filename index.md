@@ -179,6 +179,121 @@ Kami mengusulkan sebuah aplikasi berbasis AI bernama **ChatGZQ** untuk membantu 
 1. Tim Medis Siloam Hospitals, "Apa itu Stunting?", www.siloamhospitals.com  
 2. Admin RSUD Blora, "Mengenal Stunting: Penyebab Hingga Cara Pencegahannya", rsudblora.blorakab.go.id  
 
+---
+
+## **Modul 2**
+
+### **Metodologi yang digunakan**
+Metodologi SDLC yang akan digunakan adalah metodologi Agile dengan pendekatan atau framework Kanban.
+
+### **Alasan pemilihan metodologi**
+Metodologi Agile dengan pendekatan Kanban dipilih untuk proyek ChatGZQ karena fleksibilitasnya yang memungkinkan perubahan prioritas tanpa mengganggu alur kerja, memungkinkan pengerjaan fitur secara berkelanjutan tanpa perlu menunggu iterasi, serta memberikan visualisasi kerja yang jelas melalui papan Kanban. Penggunaan kanban juga mendukung pengembangan paralel antara front-end, back-end, dan chatbot tanpa siklus tetap, memungkinkan setiap bagian dikembangkan dan disempurnakan secara bertahap sesuai kebutuhan proyek.
+
+---
+
+### Perancangan Tahap 1-3 SDLC
+
+#### Tujuan dari Produk
+
+Aplikasi yang dikembangkan bertujuan untuk memberikan solusi dalam upaya pencegahan dan penanganan stunting pada anak. Fitur-fitur yang dirancang diharapkan dapat membantu orang tua dalam memantau tumbuh kembang anak. Berikut penjelasan terkait tujuan produk:
+
+- **Membantu deteksi dini risiko stunting**  
+  Fitur klasifikasi status gizi memungkinkan deteksi dini terhadap risiko kekurangan gizi dengan perhitungan berbasis tinggi, berat badan, dan usia anak.
+
+- **Memonitor pertumbuhan anak secara sistematis**  
+  Dashboard tracking dan chatbot memungkinkan pemantauan pertumbuhan anak dan penyediaan informasi terkait nutrisi pada anak.
+
+#### Pengguna Potensial dari Produk dan Kebutuhan Para Pengguna Tersebut (Ovie)
+
+Pengembangan aplikasi ini menargetkan orang tua yang memiliki anak usia 0-5 tahun dengan tingkat kesadaran yang bervariasi tentang pentingnya gizi dan pencegahan stunting pada anak. Berikut analisis kebutuhan pengguna:
+
+1. **Pemantauan pertumbuhan anak**  
+   Orang tua membutuhkan alat yang akurat dan mudah digunakan untuk mendeteksi potensi masalah gizi pada anak.
+
+2. **Konsultasi cepat dan mudah**  
+   Orang tua membutuhkan banyak informasi terkait tumbuh kembang anak, sehingga diperlukan alat yang dapat membantu mereka mencari informasi dan mendapatkan jawaban cepat tanpa harus selalu pergi ke tenaga kesehatan.
+
+3. **Rekomendasi makanan sehat**  
+   Banyak orang tua yang kesulitan dalam menentukan menu makanan anak setiap harinya. Mereka memerlukan ide atau inspirasi menu makanan yang dapat dibuat sesuai dengan anggaran dan kondisi gizi anak.
+
+#### Use case diagram
+![Use Case ChatGZQ drawio](https://github.com/user-attachments/assets/89bcfbfb-4b89-4adc-941a-d7e51a6bd15a)
+
+#### Functional requirements untuk use case yang telah dirancang 
+<table>
+  <thead>
+    <tr>
+      <th>Fitur</th>
+      <th>Deskripsi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>User Authentication</td>
+      <td>Sistem memungkinkan pengguna untuk membuat akun dan login dengan akun yang telah dibuat.</td>
+    </tr>
+    <tr>
+      <td>Dashboard</td>
+      <td>Sistem dapat menyimpan dan menampilkan data pengguna berupa informasi anak seperti usia, berat badan, dan tinggi badan.</td>
+    </tr>
+    <tr>
+      <td>Chatbot</td>
+      <td>Sistem chatbot mampu menerima input teks dan merespons dengan informasi nutrisi, menu makanan, ataupun hasil analisis yang relevan.</td>
+    </tr>
+    <tr>
+      <td>Data Processing & Analysis</td>
+      <td>Sistem dapat menghitung status gizi berdasarkan data yang dimasukkan pengguna.</td>
+    </tr>
+    <tr>
+      <td>Menu Database</td>
+      <td>Sistem dapat menyimpan data menu atau resep makanan bergizi yang kemudian dapat direkomendasikan kepada pengguna.</td>
+    </tr>
+    <tr>
+      <td>Menu Recommendation System</td>
+      <td>Sistem dapat memberikan rekomendasi terkait menu makanan bergizi yang sesuai untuk pengguna.</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Entity relationship diagram
+![chatGZQ drawio](https://github.com/user-attachments/assets/8a40be94-e9ac-4a4a-983b-c587b33dbfd0)
 
 
+#### Low-fidelity Wireframe
+
+Tampilan Lo-fi Wireframe - Halaman Register
+
+![Gambar 1. Tampilan Lo-fi Wireframe - Halaman Register](https://github.com/user-attachments/assets/d2da78cc-bc2b-47cc-afac-15bfd114ecd4)
+
+---
+
+Tampilan Lo-fi Wireframe - Halaman Login
+
+![Gambar 2. Tampilan Lo-fi Wireframe - Halaman Login](https://github.com/user-attachments/assets/5c26c0ef-f287-4ed3-8e9c-66a05407c8c7)
+
+---
+
+Tampilan Lo-fi Wireframe - Halaman Dashboard
+
+![Gambar 3. Tampilan Lo-fi Wireframe - Halaman Dashboard](https://github.com/user-attachments/assets/a28303cb-2bcf-4100-af08-06ae19fb418f)
+
+---
+Tampilan Lo-fi Wireframe - Halaman Chatbot
+
+![Gambar 4. Tampilan Lo-fi Wireframe - Halaman Chatbot](https://github.com/user-attachments/assets/d4dee91b-7320-4b33-8de8-4880cc4e92e7)
+
+---
+Tampilan Lo-fi Wireframe - Klasifikasi Gizi (Bagian Isi Data)
+
+![Gambar 5. Tampilan Lo-fi Wireframe - Klasifikasi Gizi (Bagian Isi Data)](https://github.com/user-attachments/assets/fb167a91-049b-4008-8939-dd4b73e299c3)
+
+---
+Tampilan Lo-fi Wireframe - Klasifikasi Gizi (Bagian Analisis)
+
+![Gambar 6. Tampilan Lo-fi Wireframe - Klasifikasi Gizi (Bagian Analisis)](https://github.com/user-attachments/assets/cebae9dc-23da-474c-ad27-4c575ffaf0f9)
+
+---
+
+#### Gantt-Chart
+![image](https://github.com/user-attachments/assets/4d52cc5e-f216-409c-8648-a1159c58dfbd)
 
