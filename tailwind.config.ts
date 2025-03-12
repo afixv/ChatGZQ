@@ -68,6 +68,8 @@ export default {
       "warning-80": "#A65F00",
       "warning-90": "#733E0A",
       "warning-100": "#432004",
+      white: "#ffffff",
+      black: "#000000",
     },
     fontFamily: {
       montserrat: "var(--font-montserrat)",
