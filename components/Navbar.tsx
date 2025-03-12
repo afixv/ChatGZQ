@@ -15,7 +15,7 @@ export function Navbar() {
     { name: "Rekomendasi Menu", href: "/menu" },
   ];
   return (
-    <nav className="sticky top-0 flex w-full items-center justify-between bg-primary-60 px-5 py-3 lg:px-[4%]">
+    <nav className="fixed top-0 flex w-full items-center justify-between bg-primary-60 px-5 py-3 lg:px-[4%]">
       <Link href="/" className="relative aspect-[61.52/33.01] h-8 lg:h-10">
         <Image src="logo-navbar.svg" alt="ChatGZQ" fill />
       </Link>
