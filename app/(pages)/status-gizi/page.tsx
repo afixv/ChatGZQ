@@ -1,31 +1,9 @@
-import Link from "next/link";
 import Image from "next/image";
 import { IoMdPerson } from "react-icons/io";
 import { GiBodyHeight } from "react-icons/gi";
 import { FaWeightScale } from "react-icons/fa6";
 import { TbReload } from "react-icons/tb";
-import { useState } from "react";
 import { Button } from "@/components/Button";
-
-const WeightChartCard = () => {
-  return (
-    <div className="bg-white p-4 rounded-lg shadow-md text-left">
-      <h2 className="text-lg font-bold">Berat Badan Menurut Umur (BB/U)</h2>
-
-      {/* Gambar placeholder dari /public/growth-graph.png */}
-      <img src="/growth-graph.png" alt="Grafik Berat Badan" className="w-full h-auto mt-2 rounded-md" />
-
-      <div className="bg-red-200 text-red-700 text-sm font-bold px-2 py-1 mt-2 inline-block rounded-md">
-        Berlebih
-      </div>
-
-      <p className="mt-2 font-bold">Rekomendasi:</p>
-      <p className="text-gray-600">
-        Perlu mengurangi makanan manis dan blablabla. Berat badan yang ideal adalah <b>xx kg</b>.
-      </p>
-    </div>
-  );
-};
 
 export default function Page() {
   return (
@@ -40,19 +18,14 @@ export default function Page() {
 
       {/* Informasi Status Gizi */}
       <div className="bg-primary-10 flex flex-wrap items-center gap-4 p-2 mt-6 rounded-lg max-w-sm">
-        {/* Jenis Kelamin */}
         <div className="flex items-center gap-2 text-primary-50">
           <IoMdPerson size={20} />
           <span className="text-sm font-medium">Laki - Laki (21 Bulan)</span>
         </div>
-
-        {/* Tinggi Badan */}
         <div className="flex items-center gap-2 text-primary-50">
           <GiBodyHeight size={20} />
           <span className="text-sm font-medium">100 cm</span>
         </div>
-
-        {/* Berat Badan */}
         <div className="flex items-center gap-2 text-primary-50">
           <FaWeightScale size={20} />
           <span className="text-sm font-medium">12 kg</span>
@@ -61,7 +34,7 @@ export default function Page() {
 
       {/* Grafik Status Gizi */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-      {/* Grafik 1 */}
+
       <div className="rounded-lg p-4 shadow-sm flex flex-col h-full text-left">
         <h2 className="text-lg font-bold">Berat Badan Menurut Umur (BB/U)</h2>
         <div className="relative mt-2">
@@ -82,7 +55,6 @@ export default function Page() {
         </p>
       </div>
 
-      {/* Grafik 2 */}
       <div className="rounded-lg p-4 shadow-sm flex flex-col h-full">
         <h2 className="text-lg font-bold">Tinggi Badan Menurut Umur (TB/U)</h2>
         <div className="relative mt-2 flex justify-center">
@@ -103,7 +75,6 @@ export default function Page() {
         </p>
       </div>
 
-      {/* Grafik 3 */}
       <div className="rounded-lg p-4 shadow-sm flex flex-col h-full">
         <h2 className="text-lg font-bold">Tinggi Badan Menurut Berat Badan (BB/TB)</h2>
         <div className="relative mt-2 flex justify-center">
