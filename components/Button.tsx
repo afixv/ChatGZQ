@@ -2,7 +2,7 @@ import { twMerge } from "tailwind-merge";
 
 const variants = {
   primary: "bg-primary-50 hover:bg-primary-50/80",
-  secondary: "bg-secondary-60 hover:bg-secondary-60/80",
+  secondary: "bg-secondary-60 hover:bg-secondary-60/80 text-primary-70",
   destructive: "bg-danger-60 hover:bg-danger-60/80",
   outline: "border border-primary-50 hover:bg-primary-10/80",
 };
