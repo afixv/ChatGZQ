@@ -22,7 +22,7 @@ export function Navbar() {
   }, [pathname]);
 
   return (
-    <nav className="fixed top-0 w-full bg-primary-60 px-5 py-3 lg:px-[4%]">
+    <nav className="fixed top-0 z-[1000] w-full bg-primary-60 px-5 py-3 lg:px-[4%]">
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="relative aspect-[61.52/33.01] h-8 lg:h-10">

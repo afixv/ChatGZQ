@@ -75,7 +75,7 @@ export default function Page() {
           <div ref={bottomchatRef} className="mt-2" />
         </div>
         {/* Top Fade */}
-        <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-white to-[transparent]" />
+        <div className="fixed inset-x-0 top-14 h-14 bg-gradient-to-b from-white to-[transparent] lg:top-16" />
         {/* Bottom Fade */}
         <div className="absolute inset-x-0 bottom-0 h-4 bg-gradient-to-t from-white to-[transparent]" />
       </div>
