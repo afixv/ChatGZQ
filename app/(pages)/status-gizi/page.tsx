@@ -7,17 +7,18 @@ import { Button } from "@/components/Button";
 
 export default function Page() {
   return (
-    <main className="w-full px-6 md:px-12 pt-24 pb-20">
+    <main className="w-full px-6 pb-20 pt-24 md:px-12">
       {/* Header */}
-      <h1 className="text-3xl font-bold text-gray-800 text-left">
+      <h1 className="text-gray-800 text-left text-3xl font-bold">
         Hasil Status Gizi
       </h1>
       <p className="text-gray-600 mt-2 text-left">
-        Berikut merupakan hasil kalkulasi status gizi anak anda berdasarkan data yang anda masukkan
+        Berikut merupakan hasil kalkulasi status gizi anak anda berdasarkan data
+        yang anda masukkan
       </p>
 
       {/* Informasi Status Gizi */}
-      <div className="bg-primary-10 flex flex-wrap items-center gap-4 p-2 mt-6 rounded-lg max-w-sm">
+      <div className="mt-6 flex max-w-sm flex-wrap items-center gap-4 rounded-lg bg-primary-10 p-2">
         <div className="flex items-center gap-2 text-primary-50">
           <IoMdPerson size={20} />
           <span className="text-sm font-medium">Laki - Laki (21 Bulan)</span>
@@ -33,74 +34,83 @@ export default function Page() {
       </div>
 
       {/* Grafik Status Gizi */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-
-      <div className="rounded-lg p-4 shadow-sm flex flex-col h-full text-left">
-        <h2 className="text-lg font-bold">Berat Badan Menurut Umur (BB/U)</h2>
-        <div className="relative mt-2">
-          <Image
-            src="/growth-graph.png"
-            alt="Grafik Berat Badan Menurut Umur"
-            width={250}
-            height={150}
-            className="w-full h-auto rounded-lg"
-          />
-          <span className="absolute bottom-2 left-2 bg-danger-40 text-danger-90 px-3 py-1 rounded-full text-sm font-semibold">
-            Berlebih
-          </span>
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+        <div className="flex h-full flex-col rounded-lg p-4 text-left shadow-sm">
+          <h2 className="text-lg font-bold">Berat Badan Menurut Umur (BB/U)</h2>
+          <div className="relative mt-2">
+            <Image
+              src="/growth-graph.png"
+              alt="Grafik Berat Badan Menurut Umur"
+              width={250}
+              height={150}
+              className="h-auto w-full rounded-lg"
+            />
+            <span className="absolute bottom-2 left-2 rounded-full bg-danger-40 px-3 py-1 text-sm font-semibold text-danger-90">
+              Berlebih
+            </span>
+          </div>
+          <p className="mt-2 font-bold">Rekomendasi:</p>
+          <p className="mt-2 flex-grow text-justify text-base">
+            Kurangi konsumsi makanan manis dan tinggi kalori. Berat badan ideal
+            untuk anak Anda adalah xx kg.
+          </p>
         </div>
-        <p className="font-bold mt-2">Rekomendasi:</p>
-        <p className="text-base mt-2 flex-grow text-justify">
-        Kurangi konsumsi makanan manis dan tinggi kalori. Berat badan ideal untuk anak Anda adalah xx kg.
-        </p>
+
+        <div className="flex h-full flex-col rounded-lg p-4 shadow-sm">
+          <h2 className="text-lg font-bold">
+            Tinggi Badan Menurut Umur (TB/U)
+          </h2>
+          <div className="relative mt-2 flex justify-center">
+            <Image
+              src="/graph-2.png"
+              alt="Grafik Tinggi Badan Menurut Umur"
+              width={250}
+              height={150}
+              className="h-auto w-full rounded-lg"
+            />
+            <span className="absolute bottom-2 left-2 rounded-full bg-secondary-60 px-3 py-1 text-sm font-semibold text-primary-80">
+              Sedang
+            </span>
+          </div>
+          <p className="mt-2 font-bold">Rekomendasi:</p>
+          <p className="mt-2 flex-grow text-base">
+            Pertumbuhan anak Anda sudah sesuai, tetap jaga pola makan dan gaya
+            hidup sehat!
+          </p>
+        </div>
+
+        <div className="flex h-full flex-col rounded-lg p-4 shadow-sm">
+          <h2 className="text-lg font-bold">
+            Tinggi Badan Menurut Berat Badan (BB/TB)
+          </h2>
+          <div className="relative mt-2 flex justify-center">
+            <Image
+              src="/graph-3.png"
+              alt="Grafik Tinggi Badan Menurut Berat Badan"
+              width={250}
+              height={150}
+              className="h-auto w-full rounded-lg"
+            />
+            <span className="absolute bottom-2 left-2 rounded-full bg-warning-30 px-3 py-1 text-sm font-semibold text-warning-80">
+              Kurang
+            </span>
+          </div>
+          <p className="mt-2 font-bold">Rekomendasi:</p>
+          <p className="mt-2 flex-grow text-base">
+            Tambahkan makanan protein hewani. Berat badan yang ideal adalah xx
+            kg.
+          </p>
+        </div>
       </div>
 
-      <div className="rounded-lg p-4 shadow-sm flex flex-col h-full">
-        <h2 className="text-lg font-bold">Tinggi Badan Menurut Umur (TB/U)</h2>
-        <div className="relative mt-2 flex justify-center">
-          <Image
-            src="/graph-2.png"
-            alt="Grafik Tinggi Badan Menurut Umur"
-            width={250}
-            height={150}
-            className="w-full h-auto rounded-lg"
-          />
-          <span className="absolute bottom-2 left-2 bg-secondary-60 text-primary-80 px-3 py-1 rounded-full text-sm font-semibold">
-            Sedang
-          </span>
-        </div>
-        <p className="font-bold mt-2">Rekomendasi:</p>
-        <p className="text-base mt-2 flex-grow">
-        Pertumbuhan anak Anda sudah sesuai, tetap jaga pola makan dan gaya hidup sehat!
-        </p>
-      </div>
-
-      <div className="rounded-lg p-4 shadow-sm flex flex-col h-full">
-        <h2 className="text-lg font-bold">Tinggi Badan Menurut Berat Badan (BB/TB)</h2>
-        <div className="relative mt-2 flex justify-center">
-          <Image
-            src="/graph-3.png"
-            alt="Grafik Tinggi Badan Menurut Berat Badan"
-            width={250}
-            height={150}
-            className="w-full h-auto rounded-lg"
-          />
-          <span className="absolute bottom-2 left-2 bg-warning-30 text-warning-80 px-3 py-1 rounded-full text-sm font-semibold">
-            Kurang
-          </span>
-        </div>
-        <p className="font-bold mt-2">Rekomendasi:</p>
-        <p className="text-base mt-2 flex-grow">
-          Tambahkan makanan protein hewani. Berat badan yang ideal adalah xx kg.
-        </p>
-      </div>
-    </div>
-
-    <div className="mt-2 flex">
-    <Button variant="primary" className="mt-6 w-fit text-white px-4 py-2 rounded-lg flex items-center">
+      <div className="mt-2 flex">
+        <Button
+          variant="primary"
+          className="mt-6 flex w-fit items-center rounded-lg px-4 py-2 text-white"
+        >
           Buat Data Baru <TbReload className="ml-2 text-lg" />
         </Button>
-    </div>
+      </div>
     </main>
   );
 }
