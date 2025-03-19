@@ -1,11 +1,63 @@
-import Image from "next/image";
 import { IoMdPerson } from "react-icons/io";
 import { GiBodyHeight } from "react-icons/gi";
 import { FaWeightScale } from "react-icons/fa6";
 import { TbReload } from "react-icons/tb";
 import { Button } from "@/components/Button";
+import { Chart } from "@/components/Chart";
 
 export default function Page() {
+  type Record = {
+    month: number;
+    weight: number;
+    height: number;
+  };
+  const data: Record[] = [
+    { month: 3, weight: 23, height: 58 },
+    { month: 4, weight: 27, height: 62 },
+    { month: 5, weight: 32, height: 65 },
+    { month: 7, weight: 39, height: 70 },
+    { month: 8, weight: 41, height: 73 },
+    { month: 9, weight: 43, height: 75 },
+    { month: 10, weight: 45, height: 77 },
+    { month: 12, weight: 48, height: 82 },
+    { month: 15, weight: 52, height: 88 },
+  ];
+  // Note: random data
+  const ideal_data: Record[] = Array.from({ length: 61 }, (_, month) => {
+    const weight = Math.round(2.5 + month * 0.5 + Math.random() * 2);
+    const height = Math.round(45 + month * 1.2 + Math.random() * 3);
+    return { month, weight, height };
+  });
+
+  // TODO: Fix chart data
+  const getChartData = (
+    data: Record[],
+    ideal_data: Record[],
+    func: (record: Record) => number,
+  ) => {
+    if (data.length === 0) return [];
+    const minMonth = Math.max(data[0].month, ideal_data[0].month);
+    const maxMonth = Math.min(
+      data[data.length - 1].month,
+      ideal_data[ideal_data.length - 1].month,
+    );
+    const dataMap = new Map(data.map((d) => [d.month, d]));
+    const idealDataMap = new Map(ideal_data.map((d) => [d.month, d]));
+    const getValue = (month: number, dataMap: Map<number, Record>) => {
+      const record = dataMap.get(month);
+      if (!record) return null;
+      return func(record);
+    };
+    return Array.from(
+      { length: maxMonth - minMonth + 1 },
+      (_, i) => minMonth + i,
+    ).map((month) => ({
+      x: month.toString(),
+      value: getValue(month, dataMap),
+      ideal: getValue(month, idealDataMap),
+    }));
+  };
+
   return (
     <main className="w-full px-6 pb-20 pt-24 md:px-12">
       {/* Header */}
@@ -38,12 +90,15 @@ export default function Page() {
         <div className="flex h-full flex-col rounded-lg p-4 text-left shadow-sm">
           <h2 className="text-lg font-bold">Berat Badan Menurut Umur (BB/U)</h2>
           <div className="relative mt-2">
-            <Image
-              src="/growth-graph.png"
-              alt="Grafik Berat Badan Menurut Umur"
-              width={250}
-              height={150}
-              className="h-auto w-full rounded-lg"
+            <Chart
+              // TODO: Fix chart data
+              chartData={getChartData(
+                data,
+                ideal_data,
+                (record) => record.weight,
+              )}
+              label="Berat Badan"
+              axisX="Bulan"
             />
             <span className="absolute bottom-2 left-2 rounded-full bg-danger-40 px-3 py-1 text-sm font-semibold text-danger-90">
               Berlebih
@@ -60,13 +115,16 @@ export default function Page() {
           <h2 className="text-lg font-bold">
             Tinggi Badan Menurut Umur (TB/U)
           </h2>
-          <div className="relative mt-2 flex justify-center">
-            <Image
-              src="/graph-2.png"
-              alt="Grafik Tinggi Badan Menurut Umur"
-              width={250}
-              height={150}
-              className="h-auto w-full rounded-lg"
+          <div className="relative mt-2">
+            <Chart
+              // TODO: Fix chart data
+              chartData={getChartData(
+                data,
+                ideal_data,
+                (record) => record.height,
+              )}
+              label="Tinggi Badan"
+              axisX="Bulan"
             />
             <span className="absolute bottom-2 left-2 rounded-full bg-secondary-60 px-3 py-1 text-sm font-semibold text-primary-80">
               Sedang
@@ -83,13 +141,16 @@ export default function Page() {
           <h2 className="text-lg font-bold">
             Tinggi Badan Menurut Berat Badan (BB/TB)
           </h2>
-          <div className="relative mt-2 flex justify-center">
-            <Image
-              src="/graph-3.png"
-              alt="Grafik Tinggi Badan Menurut Berat Badan"
-              width={250}
-              height={150}
-              className="h-auto w-full rounded-lg"
+          <div className="relative mt-2">
+            <Chart
+              // TODO: Fix chart data
+              chartData={data.map((record) => ({
+                x: record.height.toString(),
+                value: record.weight,
+                ideal: record.weight + Math.round(Math.random() * 5) + 5,
+              }))}
+              label="Berat Badan"
+              axisX="Tinggi"
             />
             <span className="absolute bottom-2 left-2 rounded-full bg-warning-30 px-3 py-1 text-sm font-semibold text-warning-80">
               Kurang

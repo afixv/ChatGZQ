@@ -70,6 +70,7 @@ export default {
       "warning-100": "#432004",
       white: "#ffffff",
       black: "#000000",
+      "chart-background": "#FEF4EA",
     },
     fontFamily: {
       montserrat: "var(--font-montserrat)",
