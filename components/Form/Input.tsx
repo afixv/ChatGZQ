@@ -10,6 +10,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   required?: boolean;
   className?: string;
+  containerClassName?: string;
 }
 
 export function Input({
@@ -17,6 +18,7 @@ export function Input({
   label,
   required = false,
   className,
+  containerClassName,
   ...props
 }: InputProps) {
   const mergedClassName = twMerge(
@@ -26,9 +28,9 @@ export function Input({
   );
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className={twMerge("flex flex-col gap-1", containerClassName)}>
       {label && (
-        <label className="text-gray-900 font-medium mb-1">
+        <label className="text-gray-900 mb-1 font-medium">
           {label} {required && <span className="text-danger-60">*</span>}
         </label>
       )}
