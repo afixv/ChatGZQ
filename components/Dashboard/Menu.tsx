@@ -1,5 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { dummy_menu } from "../Menu/menu";
+import { MenuCard } from "../Menu/MenuCard";
 
 export default function Menu() {
   return (
@@ -7,14 +9,9 @@ export default function Menu() {
       <h2 className="text-2xl font-semibold">Rekomendasi Menu</h2>
       {/* map card menu skeleton */}
       <div className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-3">
-        {Array(3)
-          .fill(null)
-          .map((_, index) => (
-            <div
-              key={index}
-              className="h-80 w-full animate-pulse rounded-lg bg-light-10"
-            ></div>
-          ))}
+        {dummy_menu.slice(0, 3).map((menu) => (
+          <MenuCard key={menu.slug} menu={menu} />
+        ))}
       </div>
       <Link
         href="/menu"
