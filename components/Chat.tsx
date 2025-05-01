@@ -1,4 +1,5 @@
 "use client";
+import axios from "axios";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { PiPaperPlaneRightFill } from "react-icons/pi";
@@ -9,13 +10,13 @@ export default function Chat() {
   const bottomchatRef = useRef<HTMLDivElement>(null);
   const [chats, setChats] = useState([
     {
-      from: "chatbot",
-      message: "Halo! Silakan tanya apa saja terkait gizi ya!",
+      role: "assistant",
+      content: "Halo! Silakan tanya apa saja terkait gizi ya!",
     },
   ]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const addChat = (chat: { from: "chatbot" | "user"; message: string }) => {
+  const addChat = (chat: { role: "assistant" | "user"; content: string }) => {
     setChats((prev) => [...prev, chat]);
   };
   useEffect(() => {
@@ -25,21 +26,31 @@ export default function Chat() {
     });
   }, [chats]);
 
-  const handleChatSubmit = () => {
+  const handleChatSubmit = async () => {
     if (isLoading) return;
     if (textareaRef.current?.value.trim()) {
       setIsLoading(true);
-      const message = textareaRef.current.value.trim();
-      addChat({ from: "user", message });
+      const content = textareaRef.current.value.trim();
+      const new_chats = [...chats, { role: "user", content }];
+      setChats(new_chats);
       textareaRef.current.value = "";
 
-      // TODO: chatbot API
-      setTimeout(() => addChat({ from: "chatbot", message: "..." }), 200);
-      setTimeout(() => {
-        setChats((prev) => prev.slice(0, -1));
-        addChat({ from: "chatbot", message: "Lorem ipsum" });
-        setIsLoading(false);
-      }, 1000);
+      addChat({ role: "assistant", content: "..." });
+      await axios
+        .post(process.env.NEXT_PUBLIC_CHAT_URL || "", {
+          messages: new_chats,
+        })
+        .then((res) => {
+          const content = res.data;
+          setChats((prev) => prev.slice(0, -1));
+          addChat({ role: "assistant", content });
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
   };
   return (
@@ -52,23 +63,23 @@ export default function Chat() {
               key={idx}
               className={twMerge(
                 "flex w-fit max-w-full items-end gap-3",
-                chat.from === "chatbot" ? "self-start" : "self-end",
+                chat.role === "assistant" ? "self-start" : "self-end",
               )}
             >
-              {chat.from === "chatbot" && (
-                <div className="relative aspect-square w-12">
+              {chat.role === "assistant" && (
+                <div className="relative aspect-square w-12 shrink-0">
                   <Image src="chatbot-icon.svg" alt="Chatbot" fill />
                 </div>
               )}
               <div
                 className={twMerge(
-                  "overflow-auto text-wrap break-words rounded-3xl px-5 py-6 text-xs lg:text-sm font-medium",
-                  chat.from === "chatbot"
+                  "overflow-auto whitespace-pre-line text-wrap break-words rounded-3xl px-5 py-6 text-xs font-medium lg:text-sm",
+                  chat.role === "assistant"
                     ? "rounded-bl-none bg-[#EEEEEE] text-dark-50"
                     : "rounded-tr-none bg-primary-50 text-white",
                 )}
               >
-                {chat.message}
+                {chat.content}
               </div>
             </div>
           ))}
