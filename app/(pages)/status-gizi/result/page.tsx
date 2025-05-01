@@ -14,6 +14,7 @@ export default function ResultPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [nutritionData, setNutritionData] = useState<any>(null); // to store fetched data
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,51 +46,6 @@ export default function ResultPage() {
 
     fetchNutritionData();
   }, [searchParams]);
-
-  const data = [
-    { month: 3, weight: 23, height: 58 },
-    { month: 4, weight: 27, height: 62 },
-    { month: 5, weight: 32, height: 65 },
-    { month: 7, weight: 39, height: 70 },
-    { month: 8, weight: 41, height: 73 },
-    { month: 9, weight: 43, height: 75 },
-    { month: 10, weight: 45, height: 77 },
-    { month: 12, weight: 48, height: 82 },
-    { month: 15, weight: 52, height: 88 },
-  ];
-  const ideal_data = Array.from({ length: 61 }, (_, month) => {
-    const weight = Math.round(2.5 + month * 0.5 + Math.random() * 2);
-    const height = Math.round(45 + month * 1.2 + Math.random() * 3);
-    return { month, weight, height };
-  });
-
-  const getChartData = (
-    data: any[],
-    ideal_data: any[],
-    func: (record: any) => number,
-  ) => {
-    if (data.length === 0) return [];
-    const minMonth = Math.max(data[0].month, ideal_data[0].month);
-    const maxMonth = Math.min(
-      data[data.length - 1].month,
-      ideal_data[ideal_data.length - 1].month,
-    );
-    const dataMap = new Map(data.map((d) => [d.month, d]));
-    const idealDataMap = new Map(ideal_data.map((d) => [d.month, d]));
-    const getValue = (month: number, dataMap: Map<number, any>) => {
-      const record = dataMap.get(month);
-      if (!record) return null;
-      return func(record);
-    };
-    return Array.from(
-      { length: maxMonth - minMonth + 1 },
-      (_, i) => minMonth + i,
-    ).map((month) => ({
-      x: month.toString(),
-      value: getValue(month, dataMap),
-      ideal: getValue(month, idealDataMap),
-    }));
-  };
 
   if (loading) {
     return <div className="min-h-screen">Loading...</div>;
@@ -137,13 +93,11 @@ export default function ResultPage() {
           <h2 className="text-lg font-bold">Berat Badan Menurut Umur (BB/U)</h2>
           <div className="relative mt-2">
             <Chart
-              chartData={getChartData(
-                data,
-                ideal_data,
-                (record) => record.weight,
-              )}
-              label="Berat Badan"
-              axisX="Bulan"
+              jenisKelamin={searchParams.get("jenisKelamin") || ""}
+              umur={parseInt(searchParams.get("umur") || "0")}
+              tinggiBadan={parseInt(searchParams.get("tinggi") || "0")}
+              beratBadan={parseInt(searchParams.get("berat") || "0")}
+              index="BBU"
             />
             <StatusLabel
               color={nutritionData?.bbu?.color}
@@ -163,13 +117,11 @@ export default function ResultPage() {
           </h2>
           <div className="relative mt-2">
             <Chart
-              chartData={getChartData(
-                data,
-                ideal_data,
-                (record) => record.height,
-              )}
-              label="Tinggi Badan"
-              axisX="Bulan"
+              jenisKelamin={searchParams.get("jenisKelamin") || ""}
+              umur={parseInt(searchParams.get("umur") || "0")}
+              tinggiBadan={parseInt(searchParams.get("tinggi") || "0")}
+              beratBadan={parseInt(searchParams.get("berat") || "0")}
+              index="TBU"
             />
             <StatusLabel
               color={nutritionData?.pbu?.color}
@@ -189,13 +141,11 @@ export default function ResultPage() {
           </h2>
           <div className="relative mt-2">
             <Chart
-              chartData={data.map((record) => ({
-                x: record.height.toString(),
-                value: record.weight,
-                ideal: record.weight + Math.round(Math.random() * 5) + 5,
-              }))}
-              label="Berat Badan"
-              axisX="Tinggi"
+              jenisKelamin={searchParams.get("jenisKelamin") || ""}
+              umur={parseInt(searchParams.get("umur") || "0")}
+              tinggiBadan={parseInt(searchParams.get("tinggi") || "0")}
+              beratBadan={parseInt(searchParams.get("berat") || "0")}
+              index="BBTB"
             />
             <StatusLabel
               color={nutritionData?.bbpb?.color}
