@@ -1,4 +1,5 @@
 "use client";
+import axios from "axios";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { PiPaperPlaneRightFill } from "react-icons/pi";
@@ -25,21 +26,31 @@ export default function Chat() {
     });
   }, [chats]);
 
-  const handleChatSubmit = () => {
+  const handleChatSubmit = async () => {
     if (isLoading) return;
     if (textareaRef.current?.value.trim()) {
       setIsLoading(true);
       const content = textareaRef.current.value.trim();
-      addChat({ role: "user", content });
+      const new_chats = [...chats, { role: "user", content }];
+      setChats(new_chats);
       textareaRef.current.value = "";
 
-      // TODO: chatbot API
-      setTimeout(() => addChat({ role: "assistant", content: "..." }), 200);
-      setTimeout(() => {
-        setChats((prev) => prev.slice(0, -1));
-        addChat({ role: "assistant", content: "Lorem ipsum" });
-        setIsLoading(false);
-      }, 1000);
+      addChat({ role: "assistant", content: "..." });
+      await axios
+        .post(process.env.NEXT_PUBLIC_CHAT_URL || "", {
+          messages: new_chats,
+        })
+        .then((res) => {
+          const content = res.data;
+          setChats((prev) => prev.slice(0, -1));
+          addChat({ role: "assistant", content });
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
   };
   return (
@@ -56,13 +67,13 @@ export default function Chat() {
               )}
             >
               {chat.role === "assistant" && (
-                <div className="relative aspect-square w-12">
+                <div className="relative aspect-square w-12 shrink-0">
                   <Image src="chatbot-icon.svg" alt="Chatbot" fill />
                 </div>
               )}
               <div
                 className={twMerge(
-                  "overflow-auto text-wrap break-words rounded-3xl px-5 py-6 text-xs font-medium lg:text-sm",
+                  "overflow-auto whitespace-pre-line text-wrap break-words rounded-3xl px-5 py-6 text-xs font-medium lg:text-sm",
                   chat.role === "assistant"
                     ? "rounded-bl-none bg-[#EEEEEE] text-dark-50"
                     : "rounded-tr-none bg-primary-50 text-white",
