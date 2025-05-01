@@ -9,13 +9,13 @@ export default function Chat() {
   const bottomchatRef = useRef<HTMLDivElement>(null);
   const [chats, setChats] = useState([
     {
-      from: "chatbot",
-      message: "Halo! Silakan tanya apa saja terkait gizi ya!",
+      role: "assistant",
+      content: "Halo! Silakan tanya apa saja terkait gizi ya!",
     },
   ]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const addChat = (chat: { from: "chatbot" | "user"; message: string }) => {
+  const addChat = (chat: { role: "assistant" | "user"; content: string }) => {
     setChats((prev) => [...prev, chat]);
   };
   useEffect(() => {
@@ -29,15 +29,15 @@ export default function Chat() {
     if (isLoading) return;
     if (textareaRef.current?.value.trim()) {
       setIsLoading(true);
-      const message = textareaRef.current.value.trim();
-      addChat({ from: "user", message });
+      const content = textareaRef.current.value.trim();
+      addChat({ role: "user", content });
       textareaRef.current.value = "";
 
       // TODO: chatbot API
-      setTimeout(() => addChat({ from: "chatbot", message: "..." }), 200);
+      setTimeout(() => addChat({ role: "assistant", content: "..." }), 200);
       setTimeout(() => {
         setChats((prev) => prev.slice(0, -1));
-        addChat({ from: "chatbot", message: "Lorem ipsum" });
+        addChat({ role: "assistant", content: "Lorem ipsum" });
         setIsLoading(false);
       }, 1000);
     }
@@ -52,23 +52,23 @@ export default function Chat() {
               key={idx}
               className={twMerge(
                 "flex w-fit max-w-full items-end gap-3",
-                chat.from === "chatbot" ? "self-start" : "self-end",
+                chat.role === "assistant" ? "self-start" : "self-end",
               )}
             >
-              {chat.from === "chatbot" && (
+              {chat.role === "assistant" && (
                 <div className="relative aspect-square w-12">
                   <Image src="chatbot-icon.svg" alt="Chatbot" fill />
                 </div>
               )}
               <div
                 className={twMerge(
-                  "overflow-auto text-wrap break-words rounded-3xl px-5 py-6 text-xs lg:text-sm font-medium",
-                  chat.from === "chatbot"
+                  "overflow-auto text-wrap break-words rounded-3xl px-5 py-6 text-xs font-medium lg:text-sm",
+                  chat.role === "assistant"
                     ? "rounded-bl-none bg-[#EEEEEE] text-dark-50"
                     : "rounded-tr-none bg-primary-50 text-white",
                 )}
               >
-                {chat.message}
+                {chat.content}
               </div>
             </div>
           ))}
