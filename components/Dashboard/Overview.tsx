@@ -10,7 +10,20 @@ import IconWrapper from "./IconWrapper";
 import { TbTriangleFilled } from "react-icons/tb";
 import StatusLabel from "./StatusLabel";
 
-export default function Overview() {
+export default function Overview({
+  name,
+  umur,
+  jenisKelamin,
+  historiesData,
+  nutritionData,
+}: {
+  name: string;
+  umur: number;
+  jenisKelamin: string;
+  historiesData: { date: string; height: number; weight: number }[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  nutritionData: any;
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
@@ -18,21 +31,27 @@ export default function Overview() {
 
   const data = [
     {
-      title: "Laki - Laki",
+      title: jenisKelamin === "L" ? "Laki - laki" : "Perempuan",
       icon: FaUserAlt,
-      value: "6 Bulan",
+      value: `${umur} Bulan`,
     },
     {
       title: "Berat Badan",
       icon: FaWeight,
-      value: "5.2 Kg",
-      history: -0.5,
+      value: `${historiesData?.[historiesData.length - 1]?.weight} Kg`,
+      history: (
+        historiesData?.[historiesData?.length - 1]?.weight -
+        historiesData?.[historiesData?.length - 2]?.weight
+      ).toFixed(2),
     },
     {
       title: "Tinggi Badan",
       icon: GiBodyHeight,
-      value: "60 cm",
-      history: +0.5,
+      value: `${historiesData?.[historiesData.length - 1]?.height} cm`,
+      history: (
+        historiesData?.[historiesData?.length - 1]?.height -
+        historiesData?.[historiesData?.length - 2]?.height
+      ).toFixed(2),
     },
   ];
 
@@ -40,7 +59,7 @@ export default function Overview() {
     <section>
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-4xl font-bold text-dark-30">Halo, John Doe!</h1>
+          <h1 className="text-4xl font-bold text-dark-30">Halo, {name}!</h1>
           <p className="mt-1 max-w-xl font-medium text-dark-80">
             Terus pantau perkembangan anak Anda di Dashboard ya! Jangan Lupa
             tambahkan data di sini setiap menimbang!
@@ -76,14 +95,16 @@ export default function Overview() {
                   <span className="flex items-center gap-1 text-xs font-medium">
                     <TbTriangleFilled
                       className={` ${
-                        item.history > 0
+                        parseFloat(item.history) > 0
                           ? "text-primary-60"
                           : "rotate-180 transform text-danger-70"
                       }`}
                     />
                     <span
                       className={`font-bold ${
-                        item.history > 0 ? "text-primary-60" : "text-danger-70"
+                        parseFloat(item.history) > 0
+                          ? "text-primary-60"
+                          : "text-danger-70"
                       }`}
                     >
                       {item.history}
@@ -98,15 +119,24 @@ export default function Overview() {
       <div className="relative mt-4 flex flex-wrap items-center gap-6 md:gap-12">
         <div className="flex items-center gap-4">
           <span className="text-sm font-semibold">BB/U: </span>
-          <StatusLabel />
+          <StatusLabel
+            text={nutritionData?.bbu.status}
+            color={nutritionData?.bbu.color}
+          />
         </div>
         <div className="flex items-center gap-4">
           <span className="text-sm font-semibold">BB/TB: </span>
-          <StatusLabel status="berlebih" />
+          <StatusLabel
+            text={nutritionData?.bbpb.status}
+            color={nutritionData?.bbpb.color}
+          />
         </div>
         <div className="flex items-center gap-4">
           <span className="text-sm font-semibold">TB/U: </span>
-          <StatusLabel status="baik" />
+          <StatusLabel
+            text={nutritionData?.pbu.status}
+            color={nutritionData?.pbu.color}
+          />
         </div>
         <div className="left-0 top-1/2 -z-10 h-[0.5px] w-full -translate-y-1/2 transform bg-light-20 md:absolute"></div>
       </div>
