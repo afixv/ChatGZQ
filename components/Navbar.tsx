@@ -14,7 +14,7 @@ export function Navbar() {
     { name: "Chat", href: "/chat" },
     { name: "Dashboard", href: "/dashboard" },
     { name: "Status Gizi", href: "/status-gizi" },
-    { name: "Rekomendasi Menu", href: "/menu" },
+    // { name: "Rekomendasi Menu", href: "/menu" },
   ];
 
   useEffect(() => {
