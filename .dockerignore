@@ -1,0 +1,25 @@
+# Node modules and local logs
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Build outputs
+.next
+out
+dist
+
+# OS and IDE-specific files
+.DS_Store
+.vscode
+.idea
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+
+# Other
+./chatbot

@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  nextjs:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_CHAT_URL=http://localhost:8000/query
+    depends_on:
+      - chatbot
+
+  chatbot:
+    build: ./chatbot
+    ports:
+      - "8000:8000"
