@@ -27,18 +27,19 @@ export function Chart({
   tinggiBadan,
   beratBadan,
   index,
+  childData: initialChildData,
 }: {
   jenisKelamin: string;
   umur: number;
   tinggiBadan: number;
   beratBadan: number;
   index: string;
+  childData?: { x: number; value: number }[];
 }) {
   const [sdData, setSdData] = useState<SDData[]>([]);
-  const [childData, setChildData] = useState<{
-    x: number;
-    value: number;
-  } | null>(null);
+  const [childData, setChildData] = useState<{ x: number; value: number }[]>(
+    initialChildData || [],
+  );
   const [domainX, setDomainX] = useState<[number, number]>([0, 0]);
   const [domainY, setDomainY] = useState<[number, number]>([0, 0]);
 
@@ -109,26 +110,32 @@ export function Chart({
                 ),
               ),
             ]);
-            console.log("SD Data:", sdData);
             setSdData(sdDataWithoutLastRow);
 
-            // const childPoint = data.find((row: any) => row.umur === umur);
-            // if (childPoint) {
-            //   setChildData({ x: umur, value: tinggiBadan });
-            // }
-
-            if (index === "BBU") {
-              setChildData({ x: umur, value: beratBadan });
-            } else if (index === "BBTB") {
-              setChildData({ x: tinggiBadan, value: beratBadan });
-            } else if (index === "TBU") {
-              setChildData({ x: umur, value: tinggiBadan });
+            if (!initialChildData) {
+              if (index === "BBU") {
+                setChildData([{ x: umur, value: beratBadan }]);
+              } else if (index === "BBTB") {
+                setChildData([{ x: tinggiBadan, value: beratBadan }]);
+              } else if (index === "TBU") {
+                setChildData([{ x: umur, value: tinggiBadan }]);
+              }
             }
           },
           error: (error: any) => console.error("Error parsing CSV:", error),
         });
       });
-  }, [jenisKelamin, umur, umurmodified, index, tinggiBadan]);
+  }, [
+    jenisKelamin,
+    umur,
+    umurmodified,
+    index,
+    tinggiBadan,
+    beratBadan,
+    initialChildData,
+  ]);
+
+  console.log("initialChildData", initialChildData);
 
   const chartConfig: ChartConfig = {
     value: {
@@ -168,12 +175,12 @@ export function Chart({
         )}
         {childData && (
           <Line
-            data={[childData]}
+            data={childData}
             type="monotone"
             dataKey="value"
-            stroke="#000000"
+            stroke="#079A89"
             strokeWidth={2}
-            dot={{ r: 6 }}
+            dot={{ r: 5 }}
           />
         )}
       </LineChart>
