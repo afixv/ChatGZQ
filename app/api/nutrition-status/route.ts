@@ -13,22 +13,26 @@ interface SDValues {
 interface NutritionStatusResult {
   status: string;
   value: number;
+  color: string;
 }
 
 interface Results {
   bbu: {
     status: string;
     value: number;
+    color: string;
   };
   pbu_tbu: {
     status: string;
     value: number;
     indexType: string;
+    color: string;
   };
   bbtb_bbpb: {
     status: string;
     value: number;
     indexType: string;
+    color: string;
   };
 }
 
@@ -54,38 +58,38 @@ const determineSDStatus = (
     case "BBPB":
     case "BBTB":
       if (value < sdValues.min3SD) {
-        return { status: "Gizi Buruk", value };
+        return { status: "Gizi Buruk", value, color: "red" };
       } else if (value >= sdValues.min3SD && value < sdValues.min2SD) {
-        return { status: "Gizi Kurang", value };
+        return { status: "Gizi Kurang", value, color: "yellow" };
       } else if (value >= sdValues.min2SD && value <= sdValues.plus1SD) {
-        return { status: "Gizi Baik", value };
+        return { status: "Gizi Baik", value, color: "green" };
       } else if (value > sdValues.plus1SD && value <= sdValues.plus2SD) {
-        return { status: "Berisiko Gizi Lebih", value };
+        return { status: "Berisiko Gizi Lebih", value, color: "yellow" };
       } else if (value > sdValues.plus2SD && value <= sdValues.plus3SD) {
-        return { status: "Gizi Lebih", value };
+        return { status: "Gizi Lebih", value, color: "yellow" };
       } else {
-        return { status: "Obesitas", value };
+        return { status: "Obesitas", value, color: "red" };
       }
     case "BBU":
       if (value < sdValues.min3SD) {
-        return { status: "Berat Badan Sangat Kurang", value };
+        return { status: "Berat Badan Sangat Kurang", value, color: "red" };
       } else if (value >= sdValues.min3SD && value < sdValues.min2SD) {
-        return { status: "Berat Badan Kurang", value };
+        return { status: "Berat Badan Kurang", value, color: "yellow" };
       } else if (value >= sdValues.min2SD && value <= sdValues.plus1SD) {
-        return { status: "Berat Badan Normal", value };
+        return { status: "Berat Badan Normal", value, color: "green" };
       } else {
-        return { status: "Risiko Berat Badan Lebih", value };
+        return { status: "Risiko Berat Badan Lebih", value, color: "yellow" };
       }
     case "PBU":
     case "TBU":
       if (value < sdValues.min3SD) {
-        return { status: "Sangat Pendek", value };
+        return { status: "Sangat Pendek", value, color: "red" };
       } else if (value >= sdValues.min3SD && value < sdValues.min2SD) {
-        return { status: "Pendek", value };
+        return { status: "Pendek", value, color: "yellow" };
       } else if (value >= sdValues.min2SD && value <= sdValues.plus3SD) {
-        return { status: "Normal", value };
+        return { status: "Normal", value, color: "green" };
       } else {
-        return { status: "Tinggi", value };
+        return { status: "Tinggi", value, color: "green" };
       }
     default:
       throw new Error("Tipe indeks tidak valid");
@@ -163,6 +167,10 @@ const calculateNutritionStatus = async (userData: UserData) => {
         calculations[0].status === "fulfilled"
           ? calculations[0].value.value
           : 0,
+      color:
+        calculations[0].status === "fulfilled"
+          ? calculations[0].value.color
+          : "red",
     },
     pbu_tbu: {
       status:
@@ -174,6 +182,10 @@ const calculateNutritionStatus = async (userData: UserData) => {
           ? calculations[1].value.value
           : 0,
       indexType: heightIndex,
+      color:
+        calculations[1].status === "fulfilled"
+          ? calculations[1].value.color
+          : "red",
     },
     bbtb_bbpb: {
       status:
@@ -184,7 +196,11 @@ const calculateNutritionStatus = async (userData: UserData) => {
         calculations[2].status === "fulfilled"
           ? calculations[2].value.value
           : 0,
-      indexType: ageInMonths <= 24 ? "BB/PB" : "BB/TB",
+      indexType: ageInMonths <= 24 ? "BBPB" : "BBTB",
+      color:
+        calculations[2].status === "fulfilled"
+          ? calculations[2].value.color
+          : "red",
     },
   };
 
@@ -194,18 +210,23 @@ const calculateNutritionStatus = async (userData: UserData) => {
     data: {
       bbu: {
         status: results.bbu.status,
-        category: results.bbu.status,
+        value: results.bbu.value,
         recommendations: recommendations.bbu,
+        color: results.bbu.color,
       },
       pbu: {
         status: results.pbu_tbu.status,
-        category: results.pbu_tbu.status,
+        value: results.pbu_tbu.value,
         recommendations: recommendations.pbu,
+        color: results.pbu_tbu.color,
+        indexType: results.pbu_tbu.indexType,
       },
       bbpb: {
         status: results.bbtb_bbpb.status,
-        category: results.bbtb_bbpb.status,
+        value: results.bbtb_bbpb.value,
         recommendations: recommendations.bbpb,
+        color: results.bbtb_bbpb.color,
+        indexType: results.bbtb_bbpb.indexType,
       },
     },
   };
@@ -271,6 +292,51 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.error("POST /api/nutrition-status error:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = req.nextUrl;
+    const umur = searchParams.get("umur");
+    const tinggi = searchParams.get("tinggi");
+    const jenisKelamin = searchParams.get("jenisKelamin");
+    const berat = searchParams.get("berat");
+
+    if (!umur || !tinggi || !jenisKelamin || !berat) {
+      return NextResponse.json(
+        {
+          error:
+            "Missing required query parameters (umur, tinggi, berat, jenisKelamin).",
+        },
+        { status: 400 },
+      );
+    }
+
+    const userData = {
+      umur: parseInt(umur),
+      tinggi: parseInt(tinggi),
+      jenisKelamin,
+      berat: parseInt(berat),
+    };
+
+    const validationErrors = validateUserData(userData);
+    if (validationErrors.length > 0) {
+      return NextResponse.json(
+        { error: validationErrors.join(" ") },
+        { status: 400 },
+      );
+    }
+
+    const result = await calculateNutritionStatus(userData);
+
+    return NextResponse.json(result, { status: 200 });
+  } catch (error) {
+    console.error("GET /api/nutrition-status error:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },

@@ -1,7 +1,17 @@
-export default function Home() {
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+export default function StatusGiziPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/chat");
+  }, [router]);
+
   return (
-    <main className="flex h-[120vh] items-center justify-center">
-      Lorem ipsum
-    </main>
+    <div className="flex min-h-screen items-center justify-center">
+      <p>Redirecting to chat...</p>
+    </div>
   );
 }
