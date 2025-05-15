@@ -2,61 +2,76 @@
 
 import ChartSection from "@/components/Dashboard/Chart";
 import Chat from "@/components/Dashboard/Chat";
-// import Menu from "@/components/Dashboard/Menu";
 import Overview from "@/components/Dashboard/Overview";
 import { calculateAgeInMonths } from "@/utils/calculateAge";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function Page() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [nutritionData, setNutritionData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
-  const childData = useMemo(
-    () => ({
-      name: "Kim Minji",
-      gender: "P",
-      birthDate: "2024-07-08",
-      historiesData: [
-        {
-          date: "2024-07-08",
-          height: 50,
-          weight: 3.2,
-        },
-        {
-          date: "2024-08-08",
-          height: 54,
-          weight: 4.0,
-        },
-        {
-          date: "2024-10-08",
-          height: 60,
-          weight: 5.5,
-        },
-        {
-          date: "2025-01-08",
-          height: 68,
-          weight: 7.2,
-        },
-        {
-          date: "2025-05-01",
-          height: 74,
-          weight: 6.5,
-        },
-      ],
-    }),
-    [],
-  );
+  const [childData, setChildData] = useState<{
+    name: string;
+    gender: string;
+    birthDate: string;
+    historiesData: { date: string; height: number; weight: number }[];
+  }>({
+    name: "Kim Minji",
+    gender: "P",
+    birthDate: "2024-07-08",
+    historiesData: [], // Awalnya kosong, akan diisi setelah fetch data
+  });
 
   const age = calculateAgeInMonths(childData.birthDate);
 
   useEffect(() => {
-    const fetchNutritionData = async () => {
+    const fetchHistoriesData = async () => {
       try {
-        const lastHistory =
-          childData.historiesData?.[childData.historiesData.length - 1] || {};
+        const response = await axios.get("/api/add-measurement");
+        let histories = response.data?.data || []; // Ambil array `data` dari response
+
+        // Urutkan berdasarkan tanggal (ascending)
+        histories = histories.sort(
+          (
+            a: { date: string | number | Date },
+            b: { date: string | number | Date },
+          ) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+        );
+
+        console.log("Fetched and Sorted Histories Data:", histories);
+
+        // Perbarui childData dengan histories yang telah diurutkan
+        setChildData((prev) => ({
+          ...prev,
+          historiesData: histories,
+        }));
+
+        return histories;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          setError(
+            error.response?.data?.message || "Failed to fetch histories data.",
+          );
+        } else {
+          setError("An error occurred while fetching histories data.");
+        }
+        return [];
+      }
+    };
+
+    const fetchNutritionData = async (
+      histories: typeof childData.historiesData,
+    ) => {
+      try {
+        const lastHistory = histories[histories.length - 1];
+        if (!lastHistory) {
+          setError(
+            "No histories data available to calculate nutrition status.",
+          );
+          return;
+        }
+
         const { weight, height } = lastHistory;
 
         const response = await axios.get("/api/nutrition-status", {
@@ -78,15 +93,23 @@ export default function Page() {
         } else {
           setError("An error occurred while fetching data.");
         }
-      } finally {
-        setLoading(false);
       }
     };
 
-    fetchNutritionData();
-  }, [age, childData]);
+    const fetchData = async () => {
+      setLoading(true);
+      const histories = await fetchHistoriesData();
+      if (histories.length > 0) {
+        await fetchNutritionData(histories);
+      }
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [age, childData.gender]);
 
   console.log("Nutrition Data:", nutritionData);
+  console.log("Child Data with Histories:", childData);
 
   if (loading) {
     return (
