@@ -1,5 +1,6 @@
 from sentence_transformers import SentenceTransformer
 import faiss
+import pickle
 import numpy as np
 
 from fastapi import FastAPI
@@ -17,21 +18,16 @@ from fastapi.middleware.cors import CORSMiddleware
 load_dotenv()
 
 # RAG
-embedder = SentenceTransformer("LazarusNLP/all-indobert-base-v2")
-documents = [
-    "RAG berarti Retrieval-Augmented Generation.",
-    "Ini meningkatkan model bahasa dengan menggabungkan pencarian pengetahuan eksternal.",
-    "FAISS digunakan untuk pencarian kesamaan dalam embedding secara efisien.",
-    "Hugging Face menyediakan model pra-latih untuk pembuatan teks."
-]
-doc_embeddings = embedder.encode(documents)
-index = faiss.IndexFlatL2(doc_embeddings.shape[1])
-index.add(np.array(doc_embeddings))
+model = SentenceTransformer("LazarusNLP/all-indobert-base-v2")
+
+index = faiss.read_index("./rag_index/faiss_index.index")
+with open("./rag_index/faiss_index_docs.pkl", "rb") as f:
+    documents = pickle.load(f)
 
 def retrieve(query, top_k=2):
     """Retrieve the most relevant documents for a query."""
-    query_embedding = embedder.encode([query])
-    distances, indices = index.search(np.array(query_embedding), top_k)
+    query_embedding = model.encode([query])
+    _, indices = index.search(np.array(query_embedding), top_k)
     return [documents[i] for i in indices[0]]
 
 # FastAPI
@@ -55,8 +51,6 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 @app.post("/query")
 def generate_response(request: QueryRequest):
-    # retrieved_docs = retrieve(query)
-    # context = " ".join(retrieved_docs)
     messages = [
         {
             "role": "system",

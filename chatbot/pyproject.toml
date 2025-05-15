@@ -8,6 +8,7 @@ dependencies = [
     "faiss-cpu>=1.10.0",
     "fastapi[standard]>=0.115.12",
     "groq>=0.23.0",
+    "pymupdf>=1.25.5",
     "python-dotenv>=1.1.0",
     "sentence-transformers>=4.1.0",
     "transformers>=4.51.3",
