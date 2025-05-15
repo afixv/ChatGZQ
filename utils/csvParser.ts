@@ -35,7 +35,7 @@ const getCSVFileName = (
     TBU: "TBU",
   };
 
-  return `data/${gender}-${ageCategory}-${categoryMap[indexType]}.csv`;
+  return `public/data/${gender}-${ageCategory}-${categoryMap[indexType]}.csv`;
 };
 
 const findClosestRow = (
