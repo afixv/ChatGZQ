@@ -3,6 +3,8 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { PiPaperPlaneRightFill } from "react-icons/pi";
 import { twMerge } from "tailwind-merge";
+import { Button } from "./Button";
+import Link from "next/link";
 
 export default function Chat() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -42,6 +44,20 @@ export default function Chat() {
       }, 1000);
     }
   };
+
+  const getStatusGiziHref = (command: string) => {
+    const split = command.split(" ");
+    const idx = split.indexOf(":gizi");
+    if (idx === -1 || idx + 4 >= split.length) return "";
+    return `/status-gizi/form?jenis_kelamin=${split[idx + 1]}&usia=${split[idx + 2]}&berat=${split[idx + 3]}&tinggi=${split[idx + 4]}`;
+  };
+
+  const getStatusGiziHref = (command: string) => {
+    const split = command.split(" ");
+    const idx = split.indexOf(":gizi");
+    if (idx === -1 || idx + 4 >= split.length) return "";
+    return `/status-gizi/form?jenis_kelamin=${split[idx + 1]}&usia=${split[idx + 2]}&berat=${split[idx + 3]}&tinggi=${split[idx + 4]}`;
+  };
   return (
     <>
       <div className="container relative h-full w-full">
@@ -68,7 +84,19 @@ export default function Chat() {
                     : "rounded-tr-none bg-primary-50 text-white",
                 )}
               >
-                {chat.message}
+                {chat.content.includes(":gizi") ? (
+                  <div className="flex flex-col gap-2">
+                    Untuk melihat status gizi,
+                    <br />
+                    <Link href={getStatusGiziHref(chat.content)}>
+                      <Button variant="primary" className="text-white">
+                        Tekan tombol ini.
+                      </Button>
+                    </Link>
+                  </div>
+                ) : (
+                  chat.content
+                )}
               </div>
             </div>
           ))}

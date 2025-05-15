@@ -1,17 +1,23 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/Form/Input";
 import { Select } from "@/components/Form/Select";
 
 export default function NutritionClassification() {
+  const params = useSearchParams();
   const router = useRouter();
 
+  const jenis_kelamin = params.get("jenis_kelamin");
   const [formData, setFormData] = useState({
-    gender: "",
-    age: "",
-    weight: "",
-    height: "",
+    gender: jenis_kelamin
+      ? jenis_kelamin.toLowerCase().includes("laki")
+        ? "L"
+        : "P"
+      : "",
+    age: params.get("usia") || "",
+    weight: params.get("berat") || "",
+    height: params.get("tinggi") || "",
   });
 
   const handleChange = (
