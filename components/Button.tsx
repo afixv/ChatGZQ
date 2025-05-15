@@ -31,7 +31,7 @@ export function Button({
     className,
   );
   return (
-    <button className={mergedClassName} {...props}>
+    <button className={mergedClassName} suppressHydrationWarning  {...props}>
       {children}
     </button>
   );

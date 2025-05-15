@@ -9,8 +9,11 @@ import { GiBodyHeight } from "react-icons/gi";
 import IconWrapper from "./IconWrapper";
 import { TbTriangleFilled } from "react-icons/tb";
 import StatusLabel from "./StatusLabel";
+interface OverviewProps {
+  userName?: string | null;
+}
 
-export default function Overview() {
+export default function Overview({ userName }: OverviewProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
@@ -40,7 +43,7 @@ export default function Overview() {
     <section>
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-4xl font-bold text-dark-30">Halo, John Doe!</h1>
+          <h1 className="text-4xl font-bold text-dark-30">Halo, {userName}!</h1>
           <p className="mt-1 max-w-xl font-medium text-dark-80">
             Terus pantau perkembangan anak Anda di Dashboard ya! Jangan Lupa
             tambahkan data di sini setiap menimbang!

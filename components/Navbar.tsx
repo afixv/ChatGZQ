@@ -6,10 +6,12 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { MdOutlineClose } from "react-icons/md";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 
 export function Navbar() {
   const [dropDown, setDropDown] = useState(false);
   const pathname = usePathname();
+  const { data: session } = useSession();
   const routes = [
     { name: "Chat", href: "/chat" },
     { name: "Dashboard", href: "/dashboard" },
@@ -43,7 +45,7 @@ export function Navbar() {
 
           {/* Routes */}
           <div
-            className={`absolute inset-x-0 top-full items-center justify-center rounded-b-xl bg-primary-50 transition-[max-height,padding] duration-[400ms] ease-in-out lg:static lg:flex lg:max-h-none lg:gap-8 lg:rounded-b-none lg:bg-primary-60 lg:px-0 lg:py-0 ${
+            className={`absolute inset-x-0 top-full flex flex-col items-center justify-center rounded-b-xl bg-primary-50 transition-[max-height,padding] duration-[400ms] ease-in-out lg:static lg:flex-row lg:max-h-none lg:gap-8 lg:rounded-b-none lg:bg-primary-60 lg:px-0 lg:py-0 ${
               dropDown
                 ? "max-h-[60vh] overflow-auto py-4"
                 : "max-h-0 overflow-hidden py-0"
@@ -62,6 +64,15 @@ export function Navbar() {
                 {route.name}
               </Link>
             ))}
+            {/*Conditional Button*/}
+            {session ? (
+              <Button
+                variant="secondary"
+                onClick={() => signOut({ callbackUrl: "/masuk"})}
+              >
+                Logout
+              </Button>
+            ) : (
             <Link
               href="/daftar"
               className="mx-auto block w-full max-w-[400px] px-3 py-2 text-center lg:w-auto lg:px-0 lg:py-0"
@@ -70,6 +81,7 @@ export function Navbar() {
                 Daftar
               </Button>
             </Link>
+            )}
           </div>
         </div>
       </div>

@@ -1,9 +1,50 @@
+"use client";
+
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Form/Input";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter(); 
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Form Submitted");
+
+    if (password !== passwordConfirm) {
+      setError("Password dan konfirmasi password tidak cocok.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+      console.log("API response:", data);
+      if (data.success) {
+        router.push("/data-diri");
+      } else {
+        setError(data.message || "Terjadi kesalahan saat pendaftaran.");
+      }
+    } catch {
+      setError("Terjadi kesalahan, coba lagi.");
+    }
+  };
+
   return (
     <main className="container mx-auto flex h-full min-h-screen w-full flex-col items-center justify-center px-6">
       <section className="w-full max-w-xl">
@@ -14,13 +55,15 @@ export default function Page() {
         <p className="mb-6 mt-1 font-medium text-light-60">
           Lakukan pendaftaran untuk memantau perkembangan anak anda.
         </p>
-        <form className="flex flex-col gap-y-6">
+        <form className="flex flex-col gap-y-6" onSubmit={handleSubmit}>
           <Input
             label="Email"
             placeholder="Masukkan email anda"
             name="email"
             type="email"
             required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <Input
             label="Kata Sandi"
@@ -28,6 +71,8 @@ export default function Page() {
             placeholder="Masukkan kata sandi anda"
             required
             type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <Input
             label="Konfirmasi Kata Sandi"
@@ -35,7 +80,12 @@ export default function Page() {
             placeholder="Masukkan kembali kata sandi anda"
             required
             type="password"
+            value={passwordConfirm}
+            onChange={(e) => setPasswordConfirm(e.target.value)}
           />
+          {error && (
+            <p className="mb-4 text-danger-70 font-medium text-sm">{error}</p>
+          )}
           <Button type="submit" variant="primary" className="py-3 text-white">
             Daftar
           </Button>
@@ -55,6 +105,7 @@ export default function Page() {
         <Button
           variant="outline"
           className="mt-8 w-full rounded-[10px] border border-light-30 bg-white py-3 text-dark-80 shadow-[0px_3.146px_15.73px_0px_rgba(0,_0,_0,_0.10)] hover:bg-light-10"
+          onClick={() => signIn("google", { callbackUrl: "/data-diri"})}
         >
           <Image
             src={"/logo-google.svg"}
