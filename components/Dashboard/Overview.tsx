@@ -9,6 +9,9 @@ import { GiBodyHeight } from "react-icons/gi";
 import IconWrapper from "./IconWrapper";
 import { TbTriangleFilled } from "react-icons/tb";
 import StatusLabel from "./StatusLabel";
+interface OverviewProps {
+  userName?: string | null;
+}
 
 export default function Overview({
   name,
