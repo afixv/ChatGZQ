@@ -26,6 +26,7 @@ export function Select({
   const mergedClassName = twMerge(
     "block w-full rounded-[9px] focus:ring-0 !px-3 py-[12px] border-2 font-medium focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed",
     selectVariants[variant],
+    props.value === "" && "text-dark-90",
     className,
   );
 
@@ -37,11 +38,15 @@ export function Select({
         </label>
       )}
       <select className={mergedClassName} required={required} {...props}>
-        <option value="" disabled selected>
+        <option value="" disabled>
           {placeholder || "Pilih salah satu"}
         </option>
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option
+            key={option.value}
+            value={option.value}
+            className="text-black"
+          >
             {option.label}
           </option>
         ))}
