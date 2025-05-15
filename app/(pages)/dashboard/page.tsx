@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function Page() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [nutritionData, setNutritionData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
