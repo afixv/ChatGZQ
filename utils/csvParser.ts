@@ -1,5 +1,6 @@
 import fs from "fs";
 import csv from "csv-parser";
+import path from "path";
 
 interface CsvRow {
   valueCol: string;
@@ -35,7 +36,12 @@ const getCSVFileName = (
     TBU: "TBU",
   };
 
-  return `public/data/${gender}-${ageCategory}-${categoryMap[indexType]}.csv`;
+  return path.resolve(
+    process.cwd(),
+    "public",
+    "data",
+    `${gender}-${ageCategory}-${categoryMap[indexType]}.csv`,
+  );
 };
 
 const findClosestRow = (
