@@ -1,12 +1,14 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+// import { getServerSession } from "next-auth/next";
+// import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import clientPromise from "@/lib/mongodb";
-import { Session } from "next-auth";
+// import { Session } from "next-auth";
+import { getToken } from "next-auth/jwt";
+import { NextRequest } from "next/server";
 
-export async function POST(req: Request) {
-    const session = (await getServerSession(authOptions)) as Session;
+export async function POST(req: NextRequest) {
+    const token = await getToken({ req });
 
-    if (!session || !session.user?.email) {
+    if (!token || !token.email) {
         return new Response(
             JSON.stringify({ error: "Unauthorized. Please login to continue." }),
             { status: 401, headers: { "Content-Type": "application/json" } }
@@ -21,7 +23,7 @@ export async function POST(req: Request) {
 
     try {
         await users.updateOne(
-            { email: session.user.email },
+            { email: token.email },
             {
                 $set: {
                     parentName: nama_orang_tua,
@@ -33,8 +35,6 @@ export async function POST(req: Request) {
                 },
             }
         );
-
-        session.user.isCompleted = true;
 
         return new Response(
             JSON.stringify({ success: true }),

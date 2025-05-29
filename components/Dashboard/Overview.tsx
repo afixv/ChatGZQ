@@ -9,16 +9,16 @@ import { GiBodyHeight } from "react-icons/gi";
 import IconWrapper from "./IconWrapper";
 import { TbTriangleFilled } from "react-icons/tb";
 import StatusLabel from "./StatusLabel";
-interface OverviewProps {
-  userName?: string | null;
-}
+// interface OverviewProps {
+//   userName?: string | null;
+// }
 
 export default function Overview({
-  name,
   umur,
   jenisKelamin,
   historiesData,
   nutritionData,
+  parentName,
 }: {
   name: string;
   umur: number;
@@ -26,6 +26,7 @@ export default function Overview({
   historiesData: { date: string; height: number; weight: number }[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   nutritionData: any;
+  parentName?: string | null;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -62,7 +63,9 @@ export default function Overview({
     <section>
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-4xl font-bold text-dark-30">Halo, {name}!</h1>
+          {parentName && (
+            <h1 className="text-4xl font-bold text-dark-30">Halo, {parentName}!</h1>
+          )}
           <p className="mt-1 max-w-xl font-medium text-dark-80">
             Terus pantau perkembangan anak Anda di Dashboard ya! Jangan Lupa
             tambahkan data di sini setiap menimbang!

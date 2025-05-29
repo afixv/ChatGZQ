@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function Page() {
   const [email, setEmail] = useState("");
@@ -14,6 +15,8 @@ export default function Page() {
   const [error, setError] = useState("");
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
   useEffect(() => {
     setIsClient(true);
@@ -26,6 +29,7 @@ export default function Page() {
       redirect: false,
       email,
       password,
+      callbackUrl,
     });
 
     if (res?.error) {
@@ -37,7 +41,7 @@ export default function Page() {
   
   const handleGoogleLogin = async () => {
     const res = await signIn("google", {
-      redirect: false,
+      callbackUrl: "/dashboard",
     });
   
     if (res?.error) {
@@ -85,7 +89,7 @@ export default function Page() {
   
       if (response.ok) {
         if (data.isCompleted) {
-          router.push("/dashboard");
+          router.push(callbackUrl); 
         } else {
           router.push("/data-diri");
         }

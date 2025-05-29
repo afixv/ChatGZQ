@@ -7,8 +7,9 @@ const variants = {
 };
 
 interface StatusLabelProps extends React.HTMLAttributes<HTMLDivElement> {
-  color?: keyof typeof variants;
+  status?: keyof typeof variants;
   text: string;
+  color: string;
 }
 
 export default function StatusLabel({

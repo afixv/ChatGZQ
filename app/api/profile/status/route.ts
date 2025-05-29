@@ -6,8 +6,6 @@ import { Session } from "next-auth";
 export async function GET() {
     const session = (await getServerSession(authOptions)) as Session;
 
-    console.log("Session di /api/profile/status:", session);
-
     if (!session || !session.user?.email) {
         return new Response(
             JSON.stringify({ error: "Unauthorized. Please login to continue." }),
@@ -29,9 +27,13 @@ export async function GET() {
         }
 
         return new Response(
-            JSON.stringify({ isCompleted: user.isCompleted }),
+            JSON.stringify({
+                parentName: user.parentName ?? null,
+                isCompleted: user.isCompleted,
+                child: user.child, 
+            }),
             { headers: { "Content-Type": "application/json" } }
-        );
+            );
     } catch {
         return new Response(
             JSON.stringify({ error: "Failed to check user data. Please try again." }),
@@ -39,3 +41,6 @@ export async function GET() {
         );
     }
 }
+
+
+

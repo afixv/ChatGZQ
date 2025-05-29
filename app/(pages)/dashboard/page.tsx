@@ -1,5 +1,7 @@
 "use client";
 
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import ChartSection from "@/components/Dashboard/Chart";
 import Chat from "@/components/Dashboard/Chat";
 import Overview from "@/components/Dashboard/Overview";
@@ -8,129 +10,100 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function Page() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [nutritionData, setNutritionData] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const { status, update } = useSession();
+  const router = useRouter();
+
   const [childData, setChildData] = useState<{
     name: string;
     gender: string;
     birthDate: string;
     historiesData: { date: string; height: number; weight: number }[];
-  }>({
-    name: "Kim Minji",
-    gender: "P",
-    birthDate: "2024-07-08",
-    historiesData: [], // Awalnya kosong, akan diisi setelah fetch data
-  });
+  } | null>(null);
 
-  const age = calculateAgeInMonths(childData.birthDate);
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const [nutritionData, setNutritionData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [parentName, setParentName] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchHistoriesData = async () => {
-      try {
-        const response = await axios.get("/api/add-measurement");
-        let histories = response.data?.data || []; // Ambil array `data` dari response
+    if (status === "authenticated") {
+      const fetchData = async () => {
+        try {
+          const detailRes = await fetch("/api/profile/status", {
+            credentials: "include",
+          });
 
-        // Urutkan berdasarkan tanggal (ascending)
-        histories = histories.sort(
-          (
-            a: { date: string | number | Date },
-            b: { date: string | number | Date },
-          ) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-        );
+          if (!detailRes.ok) throw new Error("Gagal mengambil detail profil");
 
-        console.log("Fetched and Sorted Histories Data:", histories);
+          const detailData = await detailRes.json();
 
-        // Perbarui childData dengan histories yang telah diurutkan
-        setChildData((prev) => ({
-          ...prev,
-          historiesData: histories,
-        }));
+          const child = detailData.child;
+          if (!child?.birthDate) {
+            setError("Data anak tidak lengkap");
+            setLoading(false);
+            return;
+          }
+          if (!child.historiesData || child.historiesData.length === 0) {
+            setError("Riwayat data anak kosong");
+            setLoading(false);
+            return;
+          }
 
-        return histories;
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          setError(
-            error.response?.data?.message || "Failed to fetch histories data.",
-          );
-        } else {
-          setError("An error occurred while fetching histories data.");
+          const age = calculateAgeInMonths(child.birthDate);
+          const lastHistory =
+            child.historiesData[child.historiesData.length - 1];
+
+          setChildData(child);
+          setParentName(detailData.parentName);
+
+          const nutritionRes = await axios.get("/api/nutrition-status", {
+            params: {
+              umur: age,
+              jenisKelamin: child.gender,
+              berat: lastHistory.weight,
+              tinggi: lastHistory.height,
+            },
+          });
+
+          setNutritionData(nutritionRes.data.data);
+        } catch (err) {
+          console.error("Fetch data error:", err);
+          setError("Gagal mengambil data");
+        } finally {
+          setLoading(false);
         }
-        return [];
-      }
-    };
+      };
 
-    const fetchNutritionData = async (
-      histories: typeof childData.historiesData,
-    ) => {
-      try {
-        const lastHistory = histories[histories.length - 1];
-        if (!lastHistory) {
-          setError(
-            "No histories data available to calculate nutrition status.",
-          );
-          return;
-        }
-
-        const { weight, height } = lastHistory;
-
-        const response = await axios.get("/api/nutrition-status", {
-          params: {
-            umur: age,
-            jenisKelamin: childData.gender,
-            berat: weight,
-            tinggi: height,
-          },
-        });
-
-        setNutritionData(response.data?.data);
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          setError(
-            error.response?.data?.message ||
-              "Failed to fetch nutrition status.",
-          );
-        } else {
-          setError("An error occurred while fetching data.");
-        }
-      }
-    };
-
-    const fetchData = async () => {
-      setLoading(true);
-      const histories = await fetchHistoriesData();
-      if (histories.length > 0) {
-        await fetchNutritionData(histories);
-      }
-      setLoading(false);
-    };
-
-    fetchData();
-  }, [age, childData.gender]);
-
-  console.log("Nutrition Data:", nutritionData);
-  console.log("Child Data with Histories:", childData);
+      fetchData();
+    } else if (status === "unauthenticated") {
+      router.push("/masuk");
+    }
+  }, [status, update, router]);
 
   if (loading) {
     return (
-      <div className="container mx-auto flex min-h-screen items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         Loading...
       </div>
     );
   }
-  if (error) {
+
+  if (error || !childData || !nutritionData) {
     return (
-      <div className="container mx-auto flex min-h-screen items-center justify-center">
-        <p className="text-red-500">{error}</p>
+      <div className="text-red-500 flex min-h-screen items-center justify-center">
+        {error || "Data tidak tersedia"}
       </div>
     );
   }
+
+  const age = calculateAgeInMonths(childData.birthDate);
 
   return (
     <main className="container mx-auto flex min-h-screen gap-4 px-6 md:px-0">
       <div className="mx-auto w-full space-y-8 pb-12 pt-24">
         <Overview
+          parentName={parentName}
           name={childData.name}
           umur={age}
           jenisKelamin={childData.gender}
@@ -139,7 +112,8 @@ export default function Page() {
         />
         <ChartSection
           title="BB/U (Berat Badan terhadap Umur)"
-          recommendations={nutritionData?.bbu.recommendations}
+          recommendations={nutritionData?.bbu.recommendations.join(", ")}
+          // recommendations={nutritionData?.bbu.recommendations}
           index="BBU"
           childData={{
             jenisKelamin: childData.gender,
@@ -155,7 +129,8 @@ export default function Page() {
         <ChartSection
           title="TB/U (Tinggi Badan terhadap Umur)"
           index="TBU"
-          recommendations={nutritionData?.pbu.recommendations}
+          recommendations={nutritionData?.pbu.recommendations.join(", ")}
+          // recommendations={nutritionData?.pbu.recommendations}
           childData={{
             jenisKelamin: childData.gender,
             umur: age,
@@ -170,7 +145,8 @@ export default function Page() {
         <ChartSection
           title="BB/TB (Berat Badan terhadap Tinggi Badan)"
           index="BBTB"
-          recommendations={nutritionData?.bbpb.recommendations}
+          recommendations={nutritionData?.bbpb.recommendations.join(", ")}
+          // recommendations={nutritionData?.bbpb.recommendations}
           childData={{
             jenisKelamin: childData.gender,
             umur: age,
