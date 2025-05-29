@@ -1,6 +1,7 @@
 // import { getServerSession } from "next-auth/next";
 // import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import clientPromise from "@/lib/mongodb";
+import connectMongo from "@/lib/mongodb";
+import UserModel from "@/models/User";
 // import { Session } from "next-auth";
 import { getToken } from "next-auth/jwt";
 import { NextRequest } from "next/server";
@@ -18,11 +19,10 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { nama_orang_tua, nama_anak, tanggal_lahir_anak, jenis_kelamin_anak } = body;
 
-    const client = await clientPromise;
-    const users = client.db().collection("users");
+    await connectMongo();
 
     try {
-        await users.updateOne(
+        await UserModel.updateOne(
             { email: token.email },
             {
                 $set: {

@@ -37,12 +37,7 @@ export function Select({
           {label} {required && <span className="text-danger-60">*</span>}
         </label>
       )}
-      <select
-        className={mergedClassName}
-        required={required}
-        defaultValue=""
-        {...props}
-      >
+      <select className={mergedClassName} required={required} {...props}>
         <option value="" disabled>
           {placeholder || "Pilih salah satu"}
         </option>
