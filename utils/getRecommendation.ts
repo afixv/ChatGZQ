@@ -18,6 +18,9 @@ const getRecommendation = (results: RecommendationResults): Recommendation => {
   let bbtbBbpbMessage = "";
 
   switch (bbu.status) {
+    case "Tidak Diketahui":
+      bbuMessage = "Belum ada data berat badan yang cukup untuk analisis.";
+      break;
     case "Berat Badan Sangat Kurang":
       bbuMessage =
         "Segera rujuk ke fasilitas kesehatan untuk penanganan lebih lanjut. Berikan PMT (Pemberian Makanan Tambahan) dengan porsi lebih sering, serta konsumsi sumber lemak (seperti santan, minyak, mentega, keju, dan lain lain) ke anak";
@@ -38,6 +41,9 @@ const getRecommendation = (results: RecommendationResults): Recommendation => {
 
   // PB/U atau TB/U
   switch (pbu_tbu.status) {
+    case "Tidak Diketahui":
+      pbuTbuMessage = `Belum ada data tinggi badan yang cukup untuk analisis.`;
+      break;
     case "Sangat Pendek":
     case "Pendek":
       pbuTbuMessage = `Segera rujuk ke fasilitas kesehatan. Berikan makanan tinggi protein hewani dan mikronutrien.`;
@@ -52,6 +58,9 @@ const getRecommendation = (results: RecommendationResults): Recommendation => {
 
   // BB/TB atau BB/PB
   switch (bbtb_bbpb.status) {
+    case "Tidak Diketahui":
+      bbtbBbpbMessage = `Belum ada data berat badan atau tinggi badan yang cukup untuk analisis.`;
+      break;
     case "Gizi Buruk":
       bbtbBbpbMessage = `Segera rujuk ke fasilitas kesehatan untuk penanganan gizi buruk.`;
       break;

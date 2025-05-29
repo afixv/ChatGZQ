@@ -34,6 +34,8 @@ export default function ResultPage() {
 
         const data = await response.json();
         setNutritionData(data.data);
+
+        console.log("Nutrition Data:", data.data);
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);

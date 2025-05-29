@@ -64,7 +64,9 @@ export default function Overview({
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           {parentName && (
-            <h1 className="text-4xl font-bold text-dark-30">Halo, {parentName}!</h1>
+            <h1 className="text-4xl font-bold text-dark-30">
+              Halo, {parentName}!
+            </h1>
           )}
           <p className="mt-1 max-w-xl font-medium text-dark-80">
             Terus pantau perkembangan anak Anda di Dashboard ya! Jangan Lupa
@@ -97,26 +99,27 @@ export default function Overview({
               </span>
               <span className="flex items-center gap-2">
                 <h2 className="-mt-1 text-lg font-bold">{item.value}</h2>
-                {item.history !== undefined && (
-                  <span className="flex items-center gap-1 text-xs font-medium">
-                    <TbTriangleFilled
-                      className={` ${
-                        parseFloat(item.history) > 0
-                          ? "text-primary-60"
-                          : "rotate-180 transform text-danger-70"
-                      }`}
-                    />
-                    <span
-                      className={`font-bold ${
-                        parseFloat(item.history) > 0
-                          ? "text-primary-60"
-                          : "text-danger-70"
-                      }`}
-                    >
-                      {item.history}
+                {item.history !== undefined &&
+                  !isNaN(parseFloat(item.history)) && (
+                    <span className="flex items-center gap-1 text-xs font-medium">
+                      <TbTriangleFilled
+                        className={` ${
+                          parseFloat(item.history) > 0
+                            ? "text-primary-60"
+                            : "rotate-180 transform text-danger-70"
+                        }`}
+                      />
+                      <span
+                        className={`font-bold ${
+                          parseFloat(item.history) > 0
+                            ? "text-primary-60"
+                            : "text-danger-70"
+                        }`}
+                      >
+                        {item.history}
+                      </span>
                     </span>
-                  </span>
-                )}
+                  )}
               </span>
             </div>
           </div>

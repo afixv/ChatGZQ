@@ -67,7 +67,7 @@ export function Navbar() {
             {/*Conditional Button*/}
             {session ? (
               <Button
-                variant="secondary"
+                variant="danger"
                 onClick={() => signOut({ callbackUrl: "/masuk"})}
               >
                 Logout

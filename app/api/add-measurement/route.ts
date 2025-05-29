@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
     const measurement = await Measurement.create({ date, weight, height });
 
     // Add measurement reference to user
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const user = await User.findOneAndUpdate(
       { email: session.user.email },
       { $push: { measurements: measurement._id } },
@@ -50,6 +51,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const GET = async (req: NextRequest) => {
   try {
     await connectMongo();
