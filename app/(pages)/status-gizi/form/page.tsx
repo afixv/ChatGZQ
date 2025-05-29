@@ -3,8 +3,6 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/Form/Input";
 import { Select } from "@/components/Form/Select";
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
 
 
 export default function NutritionClassification() {
@@ -42,14 +40,6 @@ export default function NutritionClassification() {
 
     router.push(`/status-gizi/result?${query}`);
   };
-
-  const { status } = useSession();
-
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push(`/masuk?callbackUrl=/status-gizi/form`);
-    }
-  }, [status, router]);
 
 
   return (

@@ -9,7 +9,6 @@ import { Chart } from "@/components/Chart";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import StatusLabel from "@/components/Dashboard/StatusLabel";
-import { useSession } from "next-auth/react";
 
 export default function ResultPage() {
   const router = useRouter();
@@ -49,14 +48,6 @@ export default function ResultPage() {
 
     fetchNutritionData();
   }, [searchParams]);
-
-  const { status } = useSession();
-
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push(`/masuk?callbackUrl=/status-gizi/result?${searchParams.toString()}`);
-    }
-  }, [status, searchParams, router]);
 
   if (loading) {
     return <div className="min-h-screen">Loading...</div>;
