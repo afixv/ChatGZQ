@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
 
 interface IUser extends Document {
   email: string;
@@ -10,6 +10,7 @@ interface IUser extends Document {
   childName?: string;
   childBirthDate?: Date;
   childGender?: string;
+  measurements?: Types.ObjectId[]; // Array of measurement references
 }
 
 const userSchema = new Schema<IUser>({
@@ -22,6 +23,10 @@ const userSchema = new Schema<IUser>({
   childName: { type: String },
   childBirthDate: { type: Date },
   childGender: { type: String },
+  measurements: {
+    type: [{ type: Schema.Types.ObjectId, ref: "Measurement" }],
+    default: [],
+  },
 });
 
 const User = mongoose.models.User || mongoose.model<IUser>("User", userSchema);

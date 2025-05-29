@@ -110,11 +110,11 @@ const getSDValues = async (
             return reject(new Error("Tipe indeks tidak valid"));
         }
 
-        console.log(`Searching in ${fileName}:`, {
-          indexType,
-          searchValue: valueToFind,
-          comparisonValue,
-        });
+        // console.log(`Searching in ${fileName}:`, {
+        //   indexType,
+        //   searchValue: valueToFind,
+        //   comparisonValue,
+        // });
 
         const row = findClosestRow(results, valueToFind);
 
@@ -126,7 +126,7 @@ const getSDValues = async (
           return reject(new Error("Data antropometri tidak ditemukan"));
         }
 
-        console.log(`Found row for ${indexType}:`, row);
+        // console.log(`Found row for ${indexType}:`, row);
 
         resolve({
           min3SD: parseFloat(row["min 3 SD"]),

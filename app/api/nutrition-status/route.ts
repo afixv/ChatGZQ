@@ -243,25 +243,16 @@ const validateUserData = (userData: UserData) => {
     errors.push("Umur harus antara 0-60 bulan.");
   }
 
-  if (typeof userData.berat !== "number" || userData.berat <= 0) {
+  if (typeof userData.berat !== "number" || userData.berat < 0) {
     errors.push("Berat harus berupa angka positif.");
   }
 
-  if (typeof userData.tinggi !== "number" || userData.tinggi <= 0) {
+  if (typeof userData.tinggi !== "number" || userData.tinggi < 0) {
     errors.push("Tinggi harus berupa angka positif.");
   }
 
   if (userData.jenisKelamin !== "L" && userData.jenisKelamin !== "P") {
     errors.push("Jenis kelamin harus 'L' atau 'P'.");
-  }
-
-  if (
-    !userData.umur ||
-    !userData.berat ||
-    !userData.tinggi ||
-    !userData.jenisKelamin
-  ) {
-    errors.push("Missing required fields (umur, berat, tinggi, jenisKelamin).");
   }
 
   return errors;
@@ -326,6 +317,7 @@ export async function GET(req: NextRequest) {
 
     const validationErrors = validateUserData(userData);
     if (validationErrors.length > 0) {
+      console.error("Validation errors:", validationErrors);
       return NextResponse.json(
         { error: validationErrors.join(" ") },
         { status: 400 },

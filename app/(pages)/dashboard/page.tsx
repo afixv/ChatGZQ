@@ -45,9 +45,9 @@ export default function Page() {
             return;
           }
           if (!child.historiesData || child.historiesData.length === 0) {
-            setError("Riwayat data anak kosong");
-            setLoading(false);
-            return;
+            child.historiesData = [
+              { weight: 0, height: 0, date: new Date().toISOString() },
+            ];
           }
 
           const age = calculateAgeInMonths(child.birthDate);
@@ -112,7 +112,7 @@ export default function Page() {
         />
         <ChartSection
           title="BB/U (Berat Badan terhadap Umur)"
-          recommendations={nutritionData?.bbu.recommendations.join(", ")}
+          recommendations={nutritionData?.bbu.recommendations}
           // recommendations={nutritionData?.bbu.recommendations}
           index="BBU"
           childData={{
@@ -129,7 +129,7 @@ export default function Page() {
         <ChartSection
           title="TB/U (Tinggi Badan terhadap Umur)"
           index="TBU"
-          recommendations={nutritionData?.pbu.recommendations.join(", ")}
+          recommendations={nutritionData?.pbu.recommendations}
           // recommendations={nutritionData?.pbu.recommendations}
           childData={{
             jenisKelamin: childData.gender,
@@ -145,7 +145,7 @@ export default function Page() {
         <ChartSection
           title="BB/TB (Berat Badan terhadap Tinggi Badan)"
           index="BBTB"
-          recommendations={nutritionData?.bbpb.recommendations.join(", ")}
+          recommendations={nutritionData?.bbpb.recommendations}
           // recommendations={nutritionData?.bbpb.recommendations}
           childData={{
             jenisKelamin: childData.gender,

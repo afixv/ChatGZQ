@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import connectMongo from "@/lib/mongodb";
 import UserModel from "@/models/User";
+import MeasurementModel from "@/models/Measurement";
 import { Session } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
@@ -13,11 +14,11 @@ export async function GET() {
       { status: 401, headers: { "Content-Type": "application/json" } },
     );
   }
-
   await connectMongo();
-
   try {
-    const user = await UserModel.findOne({ email: session.user.email });
+    const user = await UserModel.findOne({
+      email: session.user.email,
+    });
 
     if (!user) {
       return new Response(JSON.stringify({ error: "User not found." }), {
@@ -26,11 +27,21 @@ export async function GET() {
       });
     }
 
+    // Fetch measurements separately
+    const measurements = user.measurements
+      ? await MeasurementModel.find({ _id: { $in: user.measurements } })
+      : [];
+
     return new Response(
       JSON.stringify({
         parentName: user.parentName ?? null,
         isCompleted: user.isCompleted,
-        child: user.child,
+        child: {
+          name: user.childName ?? null,
+          birthDate: user.childBirthDate ?? null,
+          gender: user.childGender ?? null,
+          historiesData: measurements,
+        },
       }),
       { headers: { "Content-Type": "application/json" } },
     );
