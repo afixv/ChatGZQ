@@ -4,7 +4,13 @@ import IconWrapper from "./IconWrapper";
 import { FaUserAlt } from "react-icons/fa";
 import Chat from "../Chat";
 
-export default function ChatSection() {
+export default function ChatSection({
+  email,
+  name,
+}: {
+  email: string;
+  name: string;
+}) {
   return (
     <div className="sticky top-0 hidden h-screen w-1/3 border-l border-light-30 bg-[#F8F8F8] p-2 py-24 lg:block">
       <div className="flex flex-col items-center justify-center gap-2">
@@ -12,8 +18,8 @@ export default function ChatSection() {
           <FaUserAlt />
         </IconWrapper>
         <div className="text-center">
-          <h2 className="text-sm font-bold">John Doe</h2>
-          <p className="text-xs font-medium text-dark-80">johndoe@gmail.com</p>
+          <h2 className="text-sm font-bold">{name}</h2>
+          <p className="text-xs font-medium text-dark-80">{email}</p>
         </div>
       </div>
       <div className="relative my-8 px-4">

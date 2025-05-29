@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import ChartSection from "@/components/Dashboard/Chart";
-import Chat from "@/components/Dashboard/Chat";
+import ChatSection from "@/components/Dashboard/Chat";
 import Overview from "@/components/Dashboard/Overview";
 import { calculateAgeInMonths } from "@/utils/calculateAge";
 import { useState, useEffect } from "react";
@@ -25,6 +25,7 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [parentName, setParentName] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -37,6 +38,7 @@ export default function Page() {
           if (!detailRes.ok) throw new Error("Gagal mengambil detail profil");
 
           const detailData = await detailRes.json();
+          console.log("Detail Data:", detailData);
 
           const child = detailData.child;
           if (!child?.birthDate) {
@@ -56,6 +58,7 @@ export default function Page() {
 
           setChildData(child);
           setParentName(detailData.parentName);
+          setEmail(detailData.email);
 
           const nutritionRes = await axios.get("/api/nutrition-status", {
             params: {
@@ -161,7 +164,7 @@ export default function Page() {
         {/* <Menu /> */}
       </div>
 
-      <Chat />
+      <ChatSection name={parentName ?? ""} email={email ?? ""} />
     </main>
   );
 }

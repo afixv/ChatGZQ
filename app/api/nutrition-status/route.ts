@@ -57,6 +57,9 @@ const determineSDStatus = (
   switch (indexType) {
     case "BBPB":
     case "BBTB":
+      if (value === 0) {
+        return { status: "Tidak Diketahui", value, color: "gray" };
+      }
       if (value < sdValues.min3SD) {
         return { status: "Gizi Buruk", value, color: "red" };
       } else if (value >= sdValues.min3SD && value < sdValues.min2SD) {
@@ -71,6 +74,9 @@ const determineSDStatus = (
         return { status: "Obesitas", value, color: "red" };
       }
     case "BBU":
+      if (value === 0) {
+        return { status: "Tidak Diketahui", value, color: "gray" };
+      }
       if (value < sdValues.min3SD) {
         return { status: "Berat Badan Sangat Kurang", value, color: "red" };
       } else if (value >= sdValues.min3SD && value < sdValues.min2SD) {
@@ -82,6 +88,9 @@ const determineSDStatus = (
       }
     case "PBU":
     case "TBU":
+      if (value === 0) {
+        return { status: "Tidak Diketahui", value, color: "gray" };
+      }
       if (value < sdValues.min3SD) {
         return { status: "Sangat Pendek", value, color: "red" };
       } else if (value >= sdValues.min3SD && value < sdValues.min2SD) {

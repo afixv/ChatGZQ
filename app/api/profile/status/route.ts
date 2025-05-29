@@ -35,6 +35,7 @@ export async function GET() {
     return new Response(
       JSON.stringify({
         parentName: user.parentName ?? null,
+        email: user.email ?? null,
         isCompleted: user.isCompleted,
         child: {
           name: user.childName ?? null,
