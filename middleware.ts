@@ -16,7 +16,7 @@ export default withAuth(
 export const config = {
     matcher: [
         "/dashboard/:path*", 
-        "/status-gizi/:path*", 
+        // "/status-gizi/:path*", 
         "/menu/:path*", 
         "/(pages)/(auth)/data-diri/:path*"
     ],
